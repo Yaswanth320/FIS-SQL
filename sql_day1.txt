@@ -41,3 +41,166 @@ add City varchar(20)
 
 alter table tblemployee
 add constraint defcity default 'Delhi' for City
+
+-------------------------------------------------------
+
+
+--table level constraints
+create table tblTest
+(
+    Empid int,
+	EmpName varchar(30),
+	Gender char(7) not null,
+	salary float,
+	DId int,
+	City varchar(25) default 'Delhi',
+	primary key(empid),
+	constraint fkdept foreign key(DId) references tblDepartment(Deptid),
+	constraint salchk check(salary >=10000),
+)
+
+sp_help tblemployee
+
+sp_help tbltest
+
+sp_help dummy
+
+insert into tblDepartment values(20,'Sales','Mumbai'),(30,'Accounts','Bangalore'),
+(40,'Admin','Chennai')
+
+--adding a column after table creation
+alter table tblemployee 
+add Phone int not null
+
+--adding constraint post table creation
+alter table tblemployee
+add constraint chksalary check(Salary >=15000)
+
+insert into tblEmployee(Empid,EmpName,Gender,salary,DId,phone)
+values(8,'Aditya','Male',15000,30,4567887)
+
+
+select * from tblDepartment
+select * from tblemployee
+
+alter table tblemployee
+add City varchar(20)
+
+alter table tblemployee
+add constraint defcity default 'Delhi' for City
+
+--unique constraint
+alter table tbltest add Email varchar(35) unique
+
+--drop a constraint
+
+alter table tbltest
+drop constraint [DF__tblTest__City__2B3F6F97]
+
+--dropping a column from the table
+
+alter table tbltest
+drop column City
+
+--enabling/disabling check constraint
+
+insert into tbltest values(101,'ppp','m',12000,10,null)  -- testing the constraint
+
+alter table tbltest nocheck constraint salchk  -- disabling the contraint
+
+select * from tblTest
+sp_help tbltest
+
+alter table tbltest check constraint salchk  --enabling constraint
+
+--update 
+
+select * from tblEmployee
+
+update tblemployee 
+set city='Hyderabad' where empid=1
+
+update tblemployee
+set city='Mumbai', phone=555555 where empid=2
+
+update tblEmployee
+set city ='Bangalore' where city is null
+
+--delete record/records from a table
+
+delete from tbltest where salary=5000
+
+---delete vs truncate
+
+create table dummy(dummyid int identity(1,2),
+dummyname varchar(10))
+
+insert into dummy values('dummy 2')
+
+delete from dummy where dummyid=3
+select * from dummy
+select * from tbltest
+
+delete from dummy
+
+truncate table tbltest 
+
+--queries
+--1. select with aliases to make it more readable 
+
+select Empid 'Employee ID',empname as 'EmployeeName',salary 
+as EmployeeSalary from tbltest
+
+--2. select with top to select initial records
+
+select top 2 Empname,Salary from tblEmployee
+
+select top 2 * from tblEmployee
+
+--3. select with top percentage of records
+
+select top 2 percent empname from tblemployee
+
+--4. Arithemtic operators
+
+select empname, salary*12 as 'Annual Salary' from tblemployee
+
+select salary as 'Old Salary', salary+1000 as 'New Salary' from tblEmployee
+
+--5. logical operators (and, or, not)
+
+select * from tblemployee where salary>15000 and did=10
+select * from tblemployee where salary>15000 or did=10
+select * from tblemployee where salary>15000 and not did=10
+
+select empname, salary from tblemployee where salary >15000 and salary <20000
+select empname,salary from tblEmployee where salary between 15000 and 20000
+select empname,salary from tblEmployee where salary not between 15000 and 20000
+
+select * from tblemployee where salary!=15600
+
+--6. select with null values
+
+select * from tblemployee where phone is null
+select * from tblEmployee where city is not null
+
+--7. in operator - can replace multiple 'OR'
+
+select * from tblemployee where city in('Hyderabad','delhi')
+
+select * from tblemployee where city not in('Hyderabad','delhi')
+
+--8. Like operator works with wild card characters
+  -- % - one or many character substitution
+  -- _  - one character substitution
+  -- [] - any one character , which is represented inside []
+  -- ^  - works like a not
+
+  select * from tblemployee where empname like '%A'
+
+  select * from tblEmployee where empname like '__[ra]%'
+
+  
+  select * from tblEmployee where empname like '__[^ra]%'
+
+

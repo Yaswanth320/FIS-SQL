@@ -49,7 +49,7 @@ Relating one entity with another using the concept of Primary key and foreign ke
 
 
 Data Integrity in RDBMS (Integrity Constraints)
- - Entity Integrity - primary key
+ - Entity Integrity - primary key, unique key
  - Domain Integrity - Datatype, length, defaults, nullable, checks etc
             null/not null, default, check
  - Rereferntial Integrity - Foreign Key
@@ -73,3 +73,43 @@ Structured Query Lang (Sql)
   3. DQL : Data WQuery Lang. (Select)
  4. TCL: Transaction Control lang. (Rollback, Commit)
 5. DCL:Data Control Lang. (Grant, Revoke)
+
+
+Truncate           vs.            Delete
+
+-DDL command                       DML command
+-deletes all records               we can restrict records for deletion
+  and we cannot restrict
+-cannot rollback                   we can rollback if inside a transaction
+-faster                            slower compared to truncate
+
+similarites : both retain the structure
+
+Relational Algebra :
+
+Selection -  *
+Restriction  -  using a predicate called 'where'
+Projection   - column list
+Join
+Union
+Difference
+Divide
+
+Operators Supported in select clause
+
+-Arithmetic
+-Relational
+-Logical
+
+Indexes : helpful to store and retrieve faster2 types : 1. Clustered Index : are applicable on the primary key. If there are no primary key defined, then we can create a unique clustered index
+ - they sort the physical order. Every time there is any manipulation, it undergoes physical reordering of records
+ - can have only one clustered index/table
+
+
+2. Non-clustered index - can have as many as the no, of columns
+ - they do not modify the existing table contents
+ - they maintain a seperate index table, where the data is indexed and points to the data page of the original data
+ - it occupies memory
+ 
+
+
