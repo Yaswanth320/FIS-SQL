@@ -1,0 +1,75 @@
+Databases - SQL Server
+
+Can be defined as the storage of inter related data that can be organised in such a fashion that the process of retrieving data is effective and efficient
+
+Management System: A set of programs to access the data.
+-An environment that is both convinient and efficient to use
+
+Earlier database applications used to be built on top of the file system
+ 
+Drawbacks : data redundancy and inconsistency
+            difficulty in accessing data
+            data isolation
+            integrity problems
+            concurrency problems
+            security problems
+            atomicity
+
+Dbase III and IV
+Foxbase / foxpro
+
+Data Model :
+  a collection of tools for describing
+     - data
+     - data relationships
+     - data semantics
+     - data constraints
+
+
+
+HDBMS - Hierarchial database management system - Focus 4gl 
+NDBMS - Network database management system
+RDBMS - Relational database management
+ORDBMS - support for multimedia and hypertext based databases
+
+EF Codd - codds 12 rules
+Chen - E R Diagrams (visual picture to depict the relations between various pieces of data)
+
+ Data is organised as tables(relations) as rows and cols
+
+-each column represents attributes (properties) viz. Name, address, zipcode, city
+- all attributes put together in a relation are called as domain.
+-number of columns/attributes is known as degree
+-each row has values against the attributes 
+- one row is called as a tuple
+- no.of rows in a relation is known as cardinality
+- number of 
+
+Relating one entity with another using the concept of Primary key and foreign keys
+
+
+Data Integrity in RDBMS (Integrity Constraints)
+ - Entity Integrity - primary key
+ - Domain Integrity - Datatype, length, defaults, nullable, checks etc
+            null/not null, default, check
+ - Rereferntial Integrity - Foreign Key
+
+Relation Types : one-to -one
+                 one to many
+                 many to many
+
+Primary Key : No duplicates and no Null values
+
+Foreign key : Duplicates allowed, nulls are also allowed, can exists only when a primary key exists
+
+//go to the search option in task bar and type run
+it will give you atext box - type services.msc
+
+
+Structured Query Lang (Sql)
+5 components :
+  1. DDL : Data Def. Lang ( Create, Drop, Alter,Truncate)
+ 2. DML : Data Manipulation Lang (Insert,Update,Delete)
+  3. DQL : Data WQuery Lang. (Select)
+ 4. TCL: Transaction Control lang. (Rollback, Commit)
+5. DCL:Data Control Lang. (Grant, Revoke)
