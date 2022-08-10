@@ -163,3 +163,153 @@ tblemployee e full outer join tbldepartment d on e.DId=d.DeptId
 --list the names and salaries of all employees along with their manager names
 
 --self join
+
+-- SubQueries
+--employees who are drawing salary greater than anjan
+--1. find the salary of anjax
+--2. write a query to list all salaries greater than anjans' salary
+select * from tblEmployee
+--query 1
+select salary from tblemployee where empname like 'Anjan'
+
+--query 2 takes the output of query 1 and uses
+select empname,salary from tblemployee 
+where salary >
+             (select salary from tblemployee where empname like 'Prem')
+
+ --guidelines for subquery
+  /*
+ - Enclose subqueries in parenthesis
+ - Always place subquery on the right hand side of the comparison condition
+ - Use single-row operators with single row subqueries and multi-row operators
+    for multi-row subqueries
+ - Single row operators are all relational operators(<,>,<=,>=,!=,= )
+ - Can use Aggregate functions, group by, having, order by)
+
+ example 1:  list all empnames, jobs and salary whose job is as that of 7521 and
+  who earns more than 7844
+  7521, 7844 
+
+  select ename,job,sal from employee
+  where job ='salesman' and sal >1500
+             (select job from employee   
+		       where empno=7521)
+  and sal >
+              (select sal from employee   
+			    where empno=7844)
+
+ example 2 - list the name, job and salary of all employees who earn the minimum
+    salary
+
+	select ename,job,sal from employee
+	where sal =
+	              (select min(sal) from employee)
+				  */
+
+select empname,salary from tblemployee 
+ where salary = (select min(salary) from tblemployee)
+
+
+ select * from tblEmployee
+
+--example 3 : list all departments, where the minimum salary is greater than 
+--the min of department 20
+
+select did, min(salary)
+from tblEmployee
+group by did
+having min(salary) >
+                    (select min(salary) from tblemployee where did=20)
+
+
+/* Multi row subquery
+ multi row operators (in, any, all)
+
+ example:1
+ list of employees, their jobs and salary where the salary is greater than 
+ any of the clerk, but the employees should not be clerk
+
+ select ename,job,sal from employee
+ where sal >all
+              (select sal from employee where job='Clerk') (800,1100,950,1300)
+ and job <>'Clerk' */
+ update tblemployee set did=10 where empid=3
+ select * from tblemployee
+
+ select empname,city from tblemployee
+ where city in (select city from tblemployee where did=10)
+
+ /* corelated subquery
+ example 1: to find all the employees who earn more than the average salary in 
+ their department */
+
+ select empname,salary,did from tblEmployee e1
+ where salary >
+                (select avg(salary) from tblemployee where did=e1.DId)
+
+--converting the above co-related s.query using joins
+
+select e.did,e.empname,e.salary
+from tblemployee e inner join
+(select did,avg(salary)as Dept_Average from tblemployee 
+   group by did) as t on e.DId=t.DId where e.salary > t.Dept_Average
+
+
+
+-- Simple Case 
+/* case keyword will be immediately followed by an expression and before 
+when statement*/
+
+select DeptId, deptname,
+ case deptname
+ when 'IT' then 'Information Technology'
+ when 'Sales' then 'Bread Winners'
+ when 'Accounts' then 'Money People'
+ when 'Admin' then 'Top Guys'
+ else 'No Department'
+ end as 'Department Jargon'
+ from tbldepartment
+
+ --searched case
+ select deptid, deptname,
+ case 
+  when deptname='IT' then 'Information Technology'
+ when deptname='Sales' then 'Bread Winners'
+ when deptname= 'Accounts' then 'Money People'
+ else 'No Department'
+ end as 'Department Jargon'
+ from tbldepartment
+
+ 
+ --Transact-Sql ( T-Sql)
+ --case with if
+ declare @ticketcount int
+ set @ticketcount=150
+-- print @ticketcount
+ if @ticketcount>400
+  print 'Visit Nearby Location for more details'
+  else
+  begin
+  select
+  case 
+   when @ticketcount between 0 and 100 then 'Vist Nagpur'
+   when @ticketcount between 101 and 200 then 'Visit Jaipur'
+   when @ticketcount between 201 and 400 then 'Visit Canada'
+  end as 'Place to Visit'
+end
+
+
+--nested case
+
+declare @tickets int
+ set @tickets=250
+ select
+  case
+    when @tickets>=400 then 'Nearby Tourister'
+	when @tickets <400 then
+	   case
+	      when @tickets between 0 and 100 then 'Vist Nagpur'
+         when @tickets between 101 and 200 then 'Visit Jaipur'
+         when @tickets between 201 and 400 then 'Visit Canada'
+       end
+   end as 'Place to Visit'
