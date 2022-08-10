@@ -1,0 +1,165 @@
+select min(salary) from tblemployee
+
+select distinct(empid),empname from tblemployee where did=10
+
+--cannot have an aggretaged function on the RHS of a where clause
+
+select * from tblemployee where Salary>Avg(Salary)
+
+insert into tblemployee values(7,'Prem','Male',16500,30,1356667,'Chennai'),
+(4,'Saloni','Female',16200,20,345678,'Ahmedabad')
+
+update tblemployee set city='Pune' where empid=3
+
+select distinct(city) from tblEmployee
+
+select count(city) from tblemployee
+
+select count(distinct(city)) from tblemployee
+
+--average salary of dept 10
+select avg(salary) as 'Average Sal' from tblemployee
+where did=10
+
+create  nonclustered index idxempname on tblemployee (empname)
+
+drop index tblemployee.idxempname
+
+sp_help tblemployee
+
+select * from dummy
+insert into dummy values('dummy 1'),('dummy 2'),('dummy 3')
+
+create unique clustered index idxdname on dummy(dummyname)
+drop index dummy.idxdname
+
+--sorting of the display data
+--1. sorting is possible on an alias named column
+--2. sorting is possible on columns that are not a part of the select statement
+--3. sorting is possible on multiple columns
+select * from tblEmployee
+order by empname, salary desc
+
+select empid, empname as 'Employeename', salary from tblemployee
+order by Employeename
+
+select empid, salary from tblemployee order by empname
+
+--Group by : to create/divide the table data into smaller groups
+-- you cannot group on an alias name of the column
+-- any column or expression in the select list that is not an 
+--        aggregate function must be in the group by clause
+-- we can group on multiple columns
+-- where clausev cannot be used to restrict groups, instead we can use having clause
+-- group functions cannot be used in the where clause
+
+--example just forming groups of departments
+ select  did, avg(salary) as  AverageSal from tblemployee 
+ group by did
+
+ -- forming gropus of valid departments by restricting null depts
+
+ select  did, avg(salary) as  AverageSal from tblemployee 
+ where did is not null
+ group by did
+ 
+ --display the departments whose average salary is > 15800
+ select did, avg(salary) as  AverageSal from tblemployee 
+ where did is not null
+ group by did
+ having avg(salary)>15500
+ order by avg(salary)
+--order by did desc  or asc
+
+ select did,sum(salary) from tblemployee
+ group by did
+
+ -- no.of male and female employees in a dept, per dept
+ select count(gender) from tblEmployee where did=10
+ 
+ select count(gender) from tblEmployee where did=10
+ group by gender
+
+ select distinct(gender),count(gender) from tblEmployee where did=10
+ group by gender
+ 
+ select distinct(gender),count(gender) from tblEmployee 
+ group by gender
+
+ select distinct(gender), did, count(gender) as 'No.of Employees' from tblEmployee 
+ group by did,gender
+ order by did
+
+ -- display the no. of employees under each manager in descending order
+ select a.empno,a.empname,count(b.empno) as noofempl from emp a join
+emp b on a.mgrid=b.empno
+group by a.empno,a.empname
+order by count(b.empno)desc
+-- or
+select count(empno) as employees, mgrid from tblemp group by mgrid 
+order by mgrid desc
+
+-- example --list of managers who have alteast 1 employee reporting to them
+
+--select mgr.empname 'Manager Name',count(emp.empname) 'No of Employees'
+--from employee emp left outer join employee mgr 
+--on emp.mgrid=mgr.empno
+--where mrg.empname is not null
+--group by emp.mgrid,mrg.empname
+--having count(emp.ename)>1
+
+--assignment 1 q.10
+
+select d.deptname,d.deptid,sum(e.salary) as 'Total Salary' from
+tbldepartment d right outer join tblEmployee e on d.DeptId=e.DId
+group by d.DeptName,d.DeptId
+
+
+--department wise minimum salary
+
+select * from tblemployee
+select did, min(salary) as 'Lowest Salary'
+from tblemployee
+group by did order by did
+
+select empname, min(salary) as 'Min Sal',max(salary) as 'Max Sal' from tblemployee
+group by empname
+
+select empname,max(salary) from tblemployee group by empname
+
+--joins 
+-- Equi Joins/Natural Joins
+-- Non Equi Join
+-- Self Join
+-- Cross Join  - cartesian product
+-- Inner Joins
+-- Outer Joins
+    -- left outer, right outer , full outer
+--1. cross join
+select * from tblemployee, tblDepartment
+select * from tblemployee cross join tblDepartment
+
+--2. equi/natural/inner joins
+select * from tbldepartment
+select * from tblemployee
+
+select e.empid,e.empname,e.salary,d.deptid, d.deptname from
+tblemployee e, tbldepartment d
+where e.DId=d.DeptId
+
+select e.empid,e.empname,e.salary,d.deptid, d.deptname from
+tblemployee e join tbldepartment d on e.DId=d.DeptId
+
+--3. outer joins 
+select e.empid,e.empname,e.salary,d.deptid, d.deptname from
+tblemployee e left outer join tbldepartment d on e.DId=d.DeptId
+
+select e.empid,e.empname,e.salary,d.deptid, d.deptname from
+tblemployee e right outer join tbldepartment d on e.DId=d.DeptId
+
+select e.empid,e.empname,e.salary,d.deptid, d.deptname from
+tblemployee e full outer join tbldepartment d on e.DId=d.DeptId
+
+--list the names and salaries of all employees along with their manager names
+
+--self join
