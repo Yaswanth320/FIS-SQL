@@ -98,3 +98,114 @@ case
 
  select firstname,middlename,lastname,suffix + ' ' +
  coalesce(middlename, ' ' )+lastname +' '+coalesce(suffix,' ')as 'Fullname' from table
+
+
+
+/* Union , Union All
+ select col1,col2,col3
+ from table1
+ union /union all
+ select col5,col6,col7
+ from table2*/
+
+ drop table grades
+ create table Grades2
+ (
+   TId int identity(1,1),
+   Tname varchar(30),
+   Tgrade char(1),
+   TPercentage int)
+
+   insert into grades2 values('Yudhister','O',95),('Bheem','A',90),('Arjun','B',76),
+   ('Nakul','B',60)
+
+   update grades2 set tname='Raja' where tname like'Yu%'
+   select * from grades1
+   select * from grades2
+
+   select tname,tgrade,tpercentage from grades1
+   union 
+   select tname,tgrade,tpercentage from Grades2
+
+   /*intersect
+   Except*/
+   create table emp(ID int primary key,
+   EName varchar(20),Age int,City varchar(20))
+
+   create table Bonus(Bonusid int, Eid int references emp(ID),
+   Amount float)
+
+   insert into emp values(1,'Tushar',22,'Delhi'),(2,'Abhishek',21,'Nagpur'),
+   (3,'Harshitha',21,'Bangalore')
+   insert into Bonus values(101,1,20000),(102,3,25000)
+   select * from emp select * from bonus
+
+   select Id,Ename,Amount
+   from emp left join bonus on emp.id=bonus.Eid
+   intersect
+   select Id,Ename,Amount
+   from emp right join bonus on emp.id=bonus.Eid
+
+    select Id,Ename,Amount
+   from emp left join bonus on emp.id=bonus.Eid
+    except
+   select Id,Ename,Amount
+   from emp right join bonus on emp.id=bonus.Eid
+
+   select * from sys.indexes
+/*views 
+are virtual tables/relation. 
+- do not occupy space in the memory
+- only the view text is stored under the view object and not data
+- are constructed based on the underlying table
+- can use it to retrieve the data */
+
+drop view vwemployeebydept
+
+create view vwEmployeeByDept
+as
+select Empid,Empname,Salary,DeptName from tblemployee join tblDepartment
+on tblEmployee.did=tblDepartment.DeptId 
+
+sp_help vwemployeebydept
+
+select  * from vwEmployeeByDept
+select * from tblemployee
+drop view vwemp
+create view vwemp as select Empid,Empname,Gender,Salary,phone from tblemployee
+
+insert into vwemp values(200,'Banurekha','Female',16000,'007')
+
+--updating a view
+update vwEmployeeByDept set DeptName='Sales' where empname='Anjan'
+
+select * from tblDepartment
+--views with no check option
+
+create table testview(eid int,ename varchar(max))
+
+insert into testview values(1,'A'),(2,'B'),(3,'C'),(4,'D'),(5,'E')
+
+create view view1 as select eid,ename from testview where eid<5
+
+
+select * from view1
+select * from testview
+--perform DML operations on the view
+insert into view1 values(6,'F')  -- successfully inserted
+update view1 set ename='G' where eid=6 -- successfully executed without any modification
+                 --in the base table, b'coz this record(6) is out of scope in the view
+delete from view1 where eid=6
+
+--views with check option
+alter view view1 as select eid,ename from testview where eid<5
+with check option
+
+select * from testview
+select * from view1
+--perform DML operations on the view
+insert into view1 values(8,'I')  
+update view1 set ename='G' where eid=6 
+delete from view1 where eid=6
+
+
