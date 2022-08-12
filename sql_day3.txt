@@ -228,3 +228,37 @@ commit
 
 select * from tblEmployee
 select * from nulltest
+
+--RollUp and Cube
+--department wise total salary and the Grand Total
+
+--1. with group by, we dont get sub totals or grand totals
+select did,sum(salary) as 'Total Salary' from tblEmployee
+group by did
+
+--2. with rollup, we get grand total
+select did,sum(salary) as 'Total Salary' from tblEmployee
+group by rollup(did)
+
+--3. with rollup to avoid null departments
+select coalesce(did,1)as Deptnumber,sum(Salary) as 'Total Salary'
+from tblemployee
+group by RollUP(did)
+
+select * from tblEmployee
+--4. subtotals and grand totals using roll up
+select coalesce(did,100)as Departments,coalesce(gender,'Allgenders')as Gender,
+sum(salary)as 'Total Salary' from tblEmployee
+group by rollup(did,gender)
+
+/*with cube operator, we will be able to get result sets using all combinations of columns 
+--  specified in the group by cube clause
+-- so the above query would result in
+     1. grouped by dept and gender
+	 2. gropued by gender alone
+	 3. grouped by dept alone
+	 4. grand total of the group*/
+	 select * from tblemployee
+select coalesce(did,100)as Departments,coalesce(gender,'Allgenders')as Gender,
+sum(salary)as 'Total Salary' from tblEmployee
+group by cube(did,gender)

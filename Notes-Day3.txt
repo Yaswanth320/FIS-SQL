@@ -30,6 +30,15 @@ begins when the first dml statement is executed and end when any of the followin
 
 Save Transactions/points: are logical blocks/markers of a set of transactions. It is not ANSI standard
 
+Fact Table and Dimension Table
+
+Multidimensional schema
+  star schema
+  snowflake schema
+  galaxy schema
+
+
+
 
 
             
