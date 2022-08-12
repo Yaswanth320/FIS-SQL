@@ -1,0 +1,100 @@
+--cast()
+select 1+'a' as total
+select 'a'+'a' as concate
+--cast(expression as target type[(length)])
+--expression can be any literal value or a valid expression of any type
+--target type - the data type that we want to convert to(sql_variant, int,bit)
+--length is optional. default length is 30
+select cast(3.14 as int) result
+select cast(3.54 as dec(3,0))as result
+
+select cast('2022-08-12' as datetime)todaysdate
+
+select month(getdate())mon, cast(sum(salary) *12 as int)totsal from tblEmployee
+
+select cast(12500 as money)currency
+
+/*isnull() when we want a specific value that needs to be returned if the expression
+value is null*/
+select isnull(null,'hello')as greetings
+
+select * from tblemployee
+
+create table nulltest
+(serialno int,
+ename varchar(30),loc varchar(20),age int, occupation varchar(20))
+
+insert into nulltest values(4,'Inamdar','Agra',null,'Software Engg'),
+(2,'Payal','Pune',null,'Dancer'),(3,'Lakshya','Mumbai',22,'Doctor')
+
+select * from nulltest
+
+select serialno,ename,loc,isnull(age,25)as 'Age',occupation from nulltest
+
+insert into nulltest values(100,'Roger','USA',isnull(null,99),'Singer')
+
+/*Coalesce
+is used to handle null values in data records. It evaluates a set of input parameters and
+returns the first non - null value
+-running 2 or more queries as a single query
+- shortcut alternate to case
+- since coalesce is an expression by itself, it can be used in any statement or clause that 
+accepts expression like select, where, having
+
+
+*/
+select coalesce(null,null,35,null,100)
+select * from tblEmployee
+alter table tblemployee add lastname varchar(20)
+
+update tblemployee set lastname='Gupta' where empid=1
+
+select empid, empname,lastname,
+coalesce(empname,lastname)as 'not null lastname' from tblemployee
+
+select empid,empname,lastname,
+case
+ when empname is not null then empname
+ when lastname is not null then lastname
+ else null
+ end as 'not null names' from tblemployee
+
+ select empid, empname,lastname,coalesce(empid,empname,lastname)as 'new value'
+ from tblemployee
+
+ --if in case the above kind of query returns data conversion errors then use it 
+ --as below
+ select empid, empname,lastname,coalesce(convert(varchar(30),empid),empname,lastname)as 'new value'
+ from tblemployee
+
+ alter table dummy
+ add hourly_rate int
+
+ update dummy set commission=null where dummyid=13
+
+ select * from dummy
+
+  select dummyid, dummyname,salary,
+ coalesce(salary,hourly_rate*7*30 +
+ coalesce(commission,20))as compensation from dummy
+ 
+ /*both isnull() and coalesce() are used to evaluate and provide default if the 
+ evaluation value is null
+ - Both return null, if all value/s are null
+ - both can work with different datatypes
+
+ differences
+ - coalesce is ANSI compatible, and hence can work with other sql platforms like oracle etc
+ -is null is limited to take only 2 parameters, but coalesce can take many*/
+  select coalesce(null,null,null,5) as result 
+ select isnull(null,isnull(null,3))as newresults 
+
+ select isnull(null,null)
+
+ select coalesce(null,null)
+
+ declare @c char(1)  -- unassigned value but @c is typed 
+ select coalesce(null,null,@c)
+
+ select firstname,middlename,lastname,suffix + ' ' +
+ coalesce(middlename, ' ' )+lastname +' '+coalesce(suffix,' ')as 'Fullname' from table
