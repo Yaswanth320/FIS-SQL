@@ -1,0 +1,35 @@
+OLAP:Online Analytical processing. Is a category of software tools which provide analysis of data for business decision. OLAP system allows to analyze information from multiple databases
+  Examples : Sales Figures being compared for months between various countries/zones/regions/cities/branches
+The above data can come from multiple datasources
+           : Amazon analysing customers purchase patterns and recommending on those lines
+
+note : The primary objective is data analysis and not data proccessing
+
+OLTP:Online Transaction processing. Is a service that supports day to day transactions, and also administers the transactions of an organization
+
+note : The primary objective is data processing and not data analysis. To provide Transactional Superiority
+ Examples : ATM: Validating Card/Pin/Transaction
+
+OLAP creates a single platform for all types of business analysis, which includes, planning,budgeting,forecasting and analysis, while OLTP is usefule for day to transaction management
+- OLAP is characterized by large volumes of data, while OLTP is characterized by large number of online transactions
+- in OLAP, data warehouse is created uniquely, which can integrate with different data sources, while OLTP uses traditional DBMS
+
+
+Transactions : A Unit of Execution
+A database transaction consists of 
+  -DML statements
+  - one DDL
+  - one DCL
+begins when the first dml statement is executed and end when any of the following occurs
+  - rollback / commit
+  - autocommit
+  - user exits
+  - system crashes
+
+-Transaction help in maintaining data consistency, preview data changes, before making it permanent,group logically related operations
+
+Save Transactions/points: are logical blocks/markers of a set of transactions. It is not ANSI standard
+
+
+
+            

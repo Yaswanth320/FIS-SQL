@@ -208,4 +208,23 @@ insert into view1 values(8,'I')
 update view1 set ename='G' where eid=6 
 delete from view1 where eid=6
 
+--Transactions
+select * from nulltest
 
+set implicit_transactions off
+
+begin transaction
+insert into nulltest values(501,'FISGlobal2','UK',isnull(null,50),'Finance Corporate')
+select * from nulltest
+save transaction t1
+update tblemployee set did=40 where empid=200
+save transaction t2
+delete from tblemployee where empid=200
+select * from tblemployee
+insert into tblemployee values(505,'aa','male',43567,40,435678,null,'bb')
+select * from tblemployee
+rollback transaction t2
+commit
+
+select * from tblEmployee
+select * from nulltest
