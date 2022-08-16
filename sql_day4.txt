@@ -110,3 +110,62 @@ select * from HTable
 
 select cast(Level as nvarchar(100))as 'New Level',* from  htable
 order by Level
+
+--tree structured queries
+drop table dbo.tree
+create table dbo.tree
+(ID int primary key,
+treename varchar(30),
+ParentId int foreign key references dbo.tree(ID))
+
+insert into dbo.tree select 1, 'grandpa',null
+union all select 2,'dad',1
+union all select 3,'me',2
+union all select 4,'mom',1
+union all select 5,'grandma',null
+
+select * from dbo.tree;
+
+with x as
+(select ID,treename,Parentid,[level]=0
+from dbo.tree where ParentId is null
+union all
+select a.ID,a.treename,a.ParentId,[level]=x.[level] + 1
+from x inner join dbo.tree a
+on a.ParentId=x.ID
+)
+select ID,treename,ParentId,[level] from x
+order by [level]
+
+--materialized views
+create view matview with schemabinding
+as
+select
+e.empno,e.ename,e.salary,d.deptno,d.dname
+from dbo.EMPl e inner join dbo.DEPT d on e.DeptNo=d.DeptNo
+
+drop view empdept
+select * from matview
+
+drop index
+set statistics io on
+select * from dbo.matview with(noexpand)
+
+drop index matview.matindex
+create unique clustered index matindex on dbo.matview(deptno,empno)
+
+
+
+
+
+
+
+
+-materialized view creation in oracle db
+
+create materialized view matview
+as 
+select e.empid,e.lastname,e.salary,d.deptid,d.deptname
+from emp e inner join dept d on e.deptid=d.deptid
+
+select * from matview

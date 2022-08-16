@@ -58,12 +58,76 @@ There are basically 3 types of H-Query Syntax for different commercial database
   - CTE         - MS SQL
   - ANSI SQL
 
+- Table Partitioning : Dividing the table into simpler, smaaller data
+- Benefits of partitioning
+    1. Performance improvements
+    2. Increases the Availability
+    3. Helps in storage cost optimization
+    4. Data Managing becomes easier
+- When to do partition
+   - Table size > 2GB
+   - History Data co-existing with recent data
+   - Distribute Data across various devices
+   - When tabvle performance is going down
+- Types of Partitioning
+   1. Range Partition
+   2. List Partition
+   3. Hash Partition
+
+Eg: create table Products(Pid numeric, Price numeric)
+    partition by range(price)
+    (partition p1 values less than(2000).
+partition p2 values less than(5000),
+partition p3 values less than(10000),
+partition p3 values less than(maxvalue))
+
+insert into Products values(101023,5200)  -- inserted in p3
+insert into Products values(11101,3500) --- inserted in p2
+
+select * from products parition(p3)
+
+Eg : Create table Employee(empno int, state varchar(25))
+partion by List(state)
+(partition s1_AP values('AndhraPradesh'),
+partition s1_MAH values('Maharashtra'),
+partition s1_TN values('Tamilnadu'),
+partition s1_def values(Default)
+   
+
+Eg: create table emp(empid int, empname varchar(35)...)
+partition by hash(empid)partitions 5;
+
+sys_p1, sys_p2 etc..
+
+--Materialized Views: 
+
+Views have only the SQL statements stored and not the data
+
+Materialized views is a view that stores the results of the view query along with the view
+
+View									Materialized View
+Only Sql Definition is stored					Definition and the data that is the resultset is stored
+Latest Data                                           Data may not be latest
+slower 								faster
+uses the same indexes as the underlying table         can create indexes
 
 
-CTE : Common Table Expression
+Normalization : 	is a process of decomposing a larger table into several smaller, simpler ones.
+1NF, 2NF, 3NF, 4th,5th and BCNF
+	
+Why Normalize?
 
-(with Mycte as(select , where),Mycte.averagemarks)
+- Redundancy is at the root of all/several problems
+- Can cause insertion,updation and deletion anomalies
+- Wastage of storage
+
+Using a technique called as 'functional dependency', we normalize
+
+1. A table is in 1NF, when every row contains exactly only one value for each attribute(column)
+
+2. 2NF states that a table is already in 1NF and every non-prime attribute is fully dependent on the primary key. Partial dependencies are prohibited
+
+3. 3NF states that a table is already in 2NF and no non-prime attribute should have transitive dependencies (a->b->c)  a-> there exists tranitive dependency. Transtitive dependencies are prohibited
 
 
 
-		
