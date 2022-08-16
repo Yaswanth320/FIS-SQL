@@ -1,0 +1,112 @@
+create table Customers
+(custname varchar(30),
+productname varchar(40),
+amount int)
+insert into customers values('Sanket', 'Laptop', 54000),('Ankit','Desktops', 25000),
+('Sanket', 'Desktops', 25000),('Ankit','Laptop', 45000),('Chinmayi', 'Laptop', 42500),('Payal','Desktops', 25000),
+('Payal', 'Laptop', 35000),('Deepak','Desktops', 25000),
+('SanketDeepak', 'Laptop', 35000),('Chinmayi','Desktops', 25000),
+
+select  * from customers
+
+--pivoting rows into columns
+select custname,Laptop, Desktops from 
+(
+  select custname,productname,amount from customers)as PivotedData
+  pivot(count(amount) for productname in(Laptop,Desktops))as PivotTable
+
+create table Sales
+(Salesmanname varchar(30),India int, USA int, UK int)
+
+insert into Sales values('Ben',2555,5678,3350),('Raj',7899,4567,6574),('Warner',2345,5678,8996)
+
+select * from sales
+
+--unpivoting columns to rows
+select Salesmanname,Country,SaleAmount from
+(
+select salesmanname, India,USA,UK from sales) as Saledata
+unpivot(SaleAmount for Country in(India,USA,UK))as Unpivottable
+
+--rank()
+drop table results
+create table results
+(studentname varchar(40), subjects varchar(20),marks int)
+
+insert into results
+values('Shriyash','Maths',70),('Shriyash','Science',60),('Shriyash','English',80),
+('Harshana','Maths',70),('Harshana','Science',65),('Harshana','English',60),
+('Richa','Maths',80),('Richa','Science',65),('Richa','English',70)
+
+select * from results
+
+--rownumber()
+select studentname, subjects,marks,ROW_NUMBER()over(order by marks)RowNumber from results
+
+--rank()
+select studentname, subjects,marks,rank()over(order by marks)Rankno from results
+
+--rank() with partition
+
+select studentname, subjects,marks,rank()over(partition by studentname order by marks desc)Rankno from results
+
+select studentname, subjects,marks,rank()over(partition by subjects order by marks desc)Rankno from results
+
+--denserank()
+
+select studentname, subjects,marks,rank()over(order by marks)Rankno from results
+
+select studentname, subjects,marks,dense_rank()over(order by marks)Rankno from results
+
+--denserank with parition
+select studentname, subjects,marks,rank()over(partition by subjects order by marks desc)Rankno from results
+select studentname, subjects,marks,dense_rank()over(partition by subjects order by marks desc)Rankno from results
+
+select * from dept
+select * from empl
+
+--hierarchial query
+select sub.empno as subordinate_id,
+sub.ename as subordinate_name,
+sup.empno as superior_id,
+sup.ename as superior_name
+from empl sub join empl sup
+on sub.MgrId=sup.EmpNo
+order by superior_id
+
+select * from empl;
+--Hierarchial query with CTE(Common table Expressions)
+with ourcte(empno,ename,mgrid,emplevel)
+as (select empno,ename,mgrid,1 emplevel  -- initial subquery
+from empl where mgrid is null
+union all
+select e.empno,e.ename,e.mgrid, cte.emplevel + 1 -- recursive subquery
+from empl e inner join ourcte cte on e.MgrId=cte.empno
+where e.MgrId is not null)
+select * from ourcte
+order by emplevel
+
+-- eg 2 
+create table HTable
+(Level hierarchyid not null,
+loc nvarchar(30) not null,
+loctype nvarchar(10) not null)
+
+insert into Htable values
+('/1/', 'Europe', 'Continent'),  
+('/2/', 'South America', 'Continent'),  
+('/1/1/', 'France', 'Country'),  
+('/1/1/1/', 'Paris', 'City'),  
+('/1/2/1/', 'Madrid', 'City'),  
+('/1/2/', 'Spain', 'Country'),  
+('/3/', 'Antarctica', 'Continent'),  
+('/2/1/', 'Brazil', 'Country'),  
+('/2/1/1/', 'Brasilia', 'City'),  
+('/2/1/2/', 'Bahia', 'State'),  
+('/2/1/2/1/', 'Salvador', 'City'),  
+('/3/1/', 'McMurdo Station', 'City') 
+
+select * from HTable
+
+select cast(Level as nvarchar(100))as 'New Level',* from  htable
+order by Level

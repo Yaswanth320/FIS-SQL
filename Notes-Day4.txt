@@ -1,0 +1,69 @@
+Fact Table : Stores quantitative information for analysis, and is often denormalized. It consists of 2 types of columns. The foreign key columns that connect to the dimension table, and the measures column that contains the data that is being analysed.
+
+Dimension Table : Stores data about the ways in which the data in the fact table can be analysed.
+
+
+Fact : products sale
+Time Info   product   Customer  Unit sold
+8            1          2          10
+8            3          1          5
+9            1          5          20
+10           5          2           3 
+
+Dimension table 
+
+1. Customer Centric
+2. Product Centric
+3. Time Centric
+4. Region Specific
+5. Country Specific
+
+Star									Snow Flake  - 6000
+
+Fact and Dimension Tables				Fact,Dimension and sub Dimension
+Top-Down Model						Bottom Up Model
+Uses More Space					      Uses less Space	
+Takes less time for query execution			Takes more time for execution	
+Denormalized data						Normalized and also denormalized
+Design is simple						Design  is complex
+Query complexity is low                         Query complexity is high
+Less Foreign Keys						More foreign keys
+High Data Redundancy					Less Data Redundancy
+
+Galaxy Schemas: Based on the levels of hierarchy, seperate dimensions are possible
+Example : levels like Country, region,state,city etc can very clearly have 4 dimensions resp.
+This type of schema can be built by splitting start into many star
+helpful in aggregating fact tables for better understanding
+
+
+ETL : Talend, Informatica, Tableau
+
+Various OLAP Systems
+HOLAP - Hybrid OLAP
+MOLAP - Multidimensional OLAP
+ROLAP - Relational OLAP
+
+Process of moving from finer granular data to coarser data is called as roll up ,and the opposite is called as drill down
+
+
+Pivot and UnPivot : are operators used to generate multi dimensional report
+Pivot is used when we want to transfer row wise data into column wise
+UnPivot is used when we want to convert column wise data into row wise
+
+Hierarchial Queries : If using IBMs IMS(Information Management System - a Hierrachial database), then we need not write hierrachial queries. If other databases, then we need to write H-Queries to handle parent-child data for better understanding and reporting
+
+There are basically 3 types of H-Query Syntax for different commercial database
+
+  - connect by  - Oracle SQL, DB2, Postgresql,Informix
+  - CTE         - MS SQL
+  - ANSI SQL
+
+
+
+CTE : Common Table Expression
+
+(with Mycte as(select , where),Mycte.averagemarks)
+
+
+
+		
